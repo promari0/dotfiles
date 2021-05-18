@@ -1,1 +1,277 @@
+{
+;; !  | means mandatory
+    ;; #  | means optional
+    ;; !! | mandatory command + control + optional + shift (hyper)
+    ;; ## | optional any
 
+    ;; to understand better how modifiers work in karabiner
+    ;; karabiner definition of mandatory and optional
+    ;; https://pqrs.org/osx/karabiner/json.html#from-event-definition-modifiers
+
+    ;; C  | left_command
+    ;; T  | left_control
+    ;; O  | left_option
+    ;; S  | left_shift
+    ;; F  | fn
+    ;; Q  | right_command
+    ;; W  | right_control
+    ;; E  | right_option
+    ;; R  | right_shift
+    ;;
+    ;; need to prefix C T O S F with ! or #
+    ;;
+    ;; code for all this:
+    ;; https://github.com/yqrashawn/GokuRakuJoudo/blob/b9b334a187379f9bc8182ad59e2cca2a1789e9c0/src/karabiner_configurator/keys.clj#L68
+
+:profiles
+{:Default 
+
+{:default true
+        :sim     30    ;; simultaneous_threshold_milliseconds (def: 50)
+                        ;; keys need to be pressed within this threshold to be considered simultaneous
+        :delay   100    ;; to_delayed_action_delay_milliseconds (def: 500)
+                        ;; basically it means time after which the key press is count delayed
+        :alone   150   ;; to_if_alone_timeout_milliseconds (def: 1000)
+                        ;; hold for 995s and single tap registered; hold for 1005s and seen as modifier
+        :held    80    ;; to_if_held_down_threshold_milliseconds (def: 500)
+                        ;; key is fired twice when 500 ms is elapsed (otherwise seen as a hold command)
+        :modifiers {
+             :super-hyper [:command :shift :control :option :fn]
+             :hyper [:command :shift :control :option]
+             :cos [:command :shift :option]
+             :cst [:command :shift :control]
+             :co [:command :option]
+             :cs [:command :shift]
+             :ct [:command :control]
+             :to [:control :option]
+             :ts [:control :shift]
+             :os [:option :shift]
+             ;
+             }
+         }
+}
+:templates {:alfred "osascript -e 'tell application \"Alfred 4\" to run trigger \"%s\" in workflow \"%s\" with argument \"%s\"'"
+            :km "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
+            :type "osascript -e 'tell application \"System Events\" to keystroke \"%s\"'"
+            :launch "osascript -e 'tell application \"%s\" to activate'"
+            :paste "osascript -e '
+                        set the clipboard to \"%s\"
+                        tell application \"System Events\"
+                                keystroke \"v\" using command down
+                        end tell
+                        '"
+        }
+        
+
+ :layers {
+    :launch-mode {:key :grave_accent_and_tilde}
+}
+
+ :simlayers {
+             :semicolon-mode {:key :semicolon}
+             :2-mode {:key :2}
+             :q-mode {:key :q}
+             :x-mode {:key :x}
+             :quote-mode {:key :quote}
+             :caps_lock-mode {:key :caps_lock}
+             :dot-mode {:key :period}
+             :slash-mode {:key :slash}
+         	 :tilde-mode {:key :grave_accent_and_tilde}
+             :alt-option-mode{:key :left_option}
+         }
+
+;;:simlayer-threshold 500
+ :devices {:macbook-internal [{:product_id 627 :vendor_id 1452}]}
+ 
+ :input-sources {                 
+                 :us {:input_mode_id ""
+                      :input_source_id "com.apple.keylayout.US"
+                      :language "en"}
+                :ru {:input_mode_id ""
+                      :input_source_id "com.apple.keylayout.Russian"
+                      :language "ru"}}
+
+
+
+
+ :main [
+                
+        {:des "alt-option-mode"
+        :rules 
+        [:alt-option-mode 
+                [:3 [:km "_#_"]]
+                [:open_bracket [:type "["]]
+                [:close_bracket [:type "]"]]
+                [:period [:km "[]"]]
+                [:slash [:type "#"]]
+
+        ]
+    }
+
+        {:des "capskey"
+         :rules [:caps_lock-mode
+                 [:open_bracket :!CTOSopen_bracket]
+                 [:close_bracket :!CTOSclose_bracket]
+                 [:semicolon :!CTOSsemicolon]
+                 [:quote :!CTOSquote]
+                 [:comma :!CTOScomma]
+                 [:period :!CTOSperiod]
+                 [:slash :!CTOSslash]
+                 [:backslash :!CTOSbackslash]
+                 [:spacebar :!CTOSspacebar]
+                 [:grave_accent_and_tilde :!CTOSgrave_accent_and_tilde]
+                 [:a :!CTOSa]
+                 [:b :!CTOSb]
+                 [:c :!CTOSc]
+                 [:d :!CTOSd]
+                 [:e :!CTOSe]
+                 [:f :!CTOSf]
+                 [:g :!CTOSg]
+                 [:h :!CTOSh]
+                 [:i :!CTOSi]
+                 [:j :!CTOSj]
+                 [:k :!CTOSk]
+                 [:l :!CTOSl]
+                 [:m :!CTOSm]
+                 [:n :!CTOSn]
+                 [:o :!CTOSo]
+                 [:p :!CTOSp]
+                 [:q :!CTOSq]
+                 [:r :!CTOSr]
+                 [:s :!CTOSs]
+                 [:t :!CTOSt]
+                 [:u :!CTOSu]
+                 [:v :!CTOSv]
+                 [:w :!CTOSw]
+                 [:x :!CTOSx]
+                 [:y :!CTOSy]
+                 [:z :!CTOSz]
+                 [:1 :!CTOS1]
+                 [:2 :!CTOS2]
+                 [:3 :!CTOS3]
+                 [:4 :!CTOS4]
+                 [:5 :!CTOS5]
+                 [:6 :!CTOS6]
+                 [:7 :!CTOS7]
+                 [:8 :!CTOS8]
+                 [:9 :!CTOS9]
+                 [:0 :!CTOS0]
+                 ]}
+
+        {:des "qkey (apps)"
+         :rules[:q-mode
+                [:k [:km "open: keeweb"]]
+                [:1 [:km "open: edn"]]
+                [:2 [:km "reklamakr"]]
+                [:3 [:km "chat"]]
+                [:4 [:km "excel"]]
+                [:p [:km "open: Parallels"]]
+                ;;[:y [:km "youtube"]]
+                [:d [:km "GoogleDrive"]]
+                [:a [:km "airtable"]]
+                [:tab [:km "YNAB"]]
+                ;;[:comma [:km ""]]
+                ;;[:caps_lock [:km ""]]
+                ;;[:m [:km "open: Spark"]]
+                [:w [:km "open: Spark"]]
+                [:n [:km "notion"]]
+                [:s [:km "open: Safari"]]
+                [:o [:km "open: Keyboard Maestro"]]
+                [:c [:km "Calendar: Today"]]
+                ]}
+
+        {:des "2key (move)"
+         :rules [:2-mode
+                 [:j :!Cdown_arrow]
+                 [:k :!Cup_arrow]
+                 [:l :!Cright_arrow]
+                 [:h :!Cleft_arrow]
+                 [:s [:km "social"]]
+                 [:m [:km "mail"]]
+                 ]}
+
+        {:des "semicolon"
+         :rules [:semicolon-mode
+                 [:j :!Cdown_arrow]
+                 [:k :!Cup_arrow]
+                 [:l :!Cright_arrow]
+                 [:h :!Cleft_arrow]
+                 ]}
+
+        {:des "quote"
+         :rules[:quote-mode
+         		[:p [:km "Quit Parallels Desktop"]]
+                [:f [:km "GoogleDrive"]]
+                [:d [:km "GoogleDocs"]]
+                [:s [:km "GoogleSheets"]]
+                [:m [:km "mail: new"]]
+                [:z [:km "kontragenta"]]
+                [:x [:km "excel"]]
+                [:close_bracket :!CTOSy] ;;DevonThink quick note
+                ]}
+
+        {:des "dot"
+         :rules[:dot-mode
+                [:semicolon [:km "new txt Finder"]]
+                [:s [:km "NewSheet"]]
+                ]}
+
+        {:des "x-mode"
+         :rules[:x-mode
+                [:v [:km "xnview"]]
+                [:a [:km "airtable"]]
+                [:c [:km "xnconvert"]]
+                [:d [:km "GoogleDrive"]]
+                [:s [:km "GoogleSheets"]]
+                [:t [:km "en-ru"]]
+                
+                [:0 [:km "Date-Time-1"]]
+                [:m [:km "YandexMaps"]]
+                [:n [:km "note-log-md"]]
+                [:hyphen [:km "Date-Time-2"]]
+                ]}
+
+
+{:des "launch-mode: quick open applications"
+     :rules [:launch-mode
+                [:y [:km "youtube"]]
+                [:3 [:km "chat"]] 
+                [:2 [:km "obsidian"]]
+                [:1 [:km "typora"]] 
+                [:t [:km "open: telegram"]]
+                ;;[:u [:km "wm: def 1"] ] 
+                ;;[:i [:km "wm: def 2"] ] 
+                ;;[:o [:km "wm: def 3"] ] 
+                ;;[:p [:km "wm: def 3 major"] ] 
+                ;;[:j :!QWspacebar ] ;; e(m)oji
+                [:k [:km "trigger macro by name"] ] ;; keyboard maestro
+                [:l :!CSv ] ;; c(l)ipboard history
+    ]}
+        ;;{:des "Hold Tab -> Mission Control"   :rules [[:tab nil {:held :mission_control :alone :tab}]]}
+        {:des "right_alt to ctrl-tab"    :rules [[:right_alt :right_alt nil {:alone :!Cgrave_accent_and_tilde}]]}
+        ;;{:des "right_shift to caps" :rules [[:right_shift :right_shift nil {:alone [:caps_lock]}]]}
+        {:des "right_shift to EN" :rules [[:right_shift :right_shift nil {:alone [:km "EN"]}]]}
+        {:des "left_shift to RU" :rules [[:left_shift :left_shift nil {:alone [:km "RU"]}]]}
+        {:des "right cmd -> cmd+tab"    :rules [[:right_command :right_command nil {:alone :!CStab}]]}
+        {:des "left cmd -> cmd+tab" :rules [[:left_command :left_command nil {:alone :!Ctab}]]}
+        ;;{:des "slash -> dot" :rules [[:slash :!S7]]}
+        
+
+        {:des "simultaneously"
+         :rules [
+                [[:p :o] [:km "open: photos"]]
+                [[:p :l] [:km "open: photoshop"]]
+                [[:l :i] [:km "open: Illustrator"]]
+                [[:c :o] [:km "open: Contacts"]]
+                [[:g :s] [:km "Google Sheets"]]
+                [[:g :d] [:km "Drive Google"]]
+                [[:y :n] [:km "YNAB"]]
+                [[:y :t] [:km "youtube"]]
+                [[:u :i] [:km "open: Music"]]
+                [[:s :c] [:km "open: screenshots"]]
+                [[:q :z] [:km "new txt Finder"]]
+                [[:o :0] [:km "PasteTypora"]]
+        ]}
+]
+ 
+}
